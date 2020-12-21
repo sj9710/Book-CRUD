@@ -1,13 +1,13 @@
 import React from "react";
-import { TodoForm } from "./TodoForm";
-import { createTodo } from "../api";
+import { BookForm } from "./BookForm";
+import { createBook } from "../api";
 import { useHistory } from "react-router-dom";
 
-export const CreateTodo = () => {
+export const CreateBook = () => {
   const history = useHistory();
 
   const onSubmit = async (data) => {
-    await createTodo(data);
+    await createBook(data);
     history.push("/");
   };
 
@@ -15,7 +15,7 @@ export const CreateTodo = () => {
     <div className="container">
       <div className="mt-3">
         <h3>Enter the details of Book</h3>
-        <TodoForm onSubmit={onSubmit} />
+        <BookForm onSubmit={onSubmit} />
       </div>
     </div>
   );

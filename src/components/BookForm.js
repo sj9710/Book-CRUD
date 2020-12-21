@@ -1,17 +1,16 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-export const TodoForm = ({ todo, onSubmit }) => {
+export const BookForm = ({ book, onSubmit }) => {
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      text: todo ? todo.text : "",
-      author: todo ? todo.author : "",
-      genre: todo ? todo.genre : "",
+      text: book ? book.text : "",
+      author: book ? book.author : "",
+      genre: book ? book.genre : "",
     },
   });
 
   const submitHandler = handleSubmit((data) => {
-    console.log(data);
     onSubmit(data);
   });
 

@@ -1,9 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const Todo = require("./models/Todo");
+const Book = require("./models/BookList");
 
-mongoose.connect("mongodb://127.0.0.1:27017/todos", {
+require('dotenv').config();
+
+mongoose.connect(process.env.ATLAS_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -12,7 +14,7 @@ mongoose.connection.once("open", () => {
   console.log("Mongodb connection established successfully");
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 const app = express();
 
@@ -20,22 +22,21 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  Todo.find((err, todos) => {
+  Book.find((err, Book) => {
     if (err) {
       console.log(err);
     } else {
-      res.json(todos);
+      res.json(Book);
     }
   });
 });
 
 app.post("/create", (req, res) => {
-  const todo = new Todo(req.body);
-  console.log(todo);
-  todo
+  const book = new Book(req.body);
+  book
     .save()
-    .then((todo) => {
-      res.json(todo);
+    .then((book) => {
+      res.json(book);
     })
     .catch((err) => {
       res.status(500).send(err.message);
@@ -44,36 +45,34 @@ app.post("/create", (req, res) => {
 
 app.get("/delete/:id", (req, res) => {
   const id = req.params.id;
-  console.log(id);
-  Todo.findByIdAndRemove(id, (err) => {
+  Book.findByIdAndRemove(id, (err) => {
     if (!id) {
-      res.status(404).send("Todo not found");
+      res.status(404).send("Book not found");
     }
-    console.log(id);
   });
 });
 
 app.get("/:id", (req, res) => {
   const id = req.params.id;
-  Todo.findById(id, (err, todo) => {
-    res.json(todo);
+  Book.findById(id, (err, book) => {
+    res.json(book);
   });
 });
 
 app.post("/:id", (req, res) => {
   const id = req.params.id;
-  Todo.findById(id, (err, todo) => {
-    if (!todo) {
-      res.status(404).send("Todo not found");
+  Book.findById(id, (err, book) => {
+    if (!book) {
+      res.status(404).send("Book not found");
     } else {
-      todo.text = req.body.text;
-      todo.author = req.body.author;
-      todo.genre = req.body.genre;
+      book.text = req.body.text;
+      book.author = req.body.author;
+      book.genre = req.body.genre;
 
-      todo
+      book
         .save()
-        .then((todo) => {
-          res.json(todo);
+        .then((book) => {
+          res.json(book);
         })
         .catch((err) => res.status(500).send(err.message));
     }
@@ -84,11 +83,4 @@ app.listen(PORT, () => {
   console.log("Server is running on port " + PORT);
 });
 
-var MongoClient = require("mongodb").MongoClient;
-
-// var uri = "mongodb://admin:<password>@<hostname>/<dbname>?ssl=true&replicaSet=atlas-594buk-shard-0&authSource=admin&retryWrites=true&w=majority";
-// MongoClient.connect(uri, function(err, client) {
-//   const collection = client.db("test").collection("devices");
-//   // perform actions on the collection object
-//   client.close();
-// });
+// var MongoClient = require("mongodb").MongoClient;

@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getTodos, deleteTodo } from "../api";
+import { getBooks, deleteBook } from "../api";
 
-export const TodoList = () => {
+export const BookList = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
     const fetchItems = async () => {
-      const todos = await getTodos();
-      setItems(todos);
-      // console.log(todos);
+      const books = await getBooks();
+      setItems(books);
     };
     fetchItems();
   }, []);
 
   const ass = (datass) => {
-    deleteTodo(datass);
+    deleteBook(datass);
     const fetchItems = async () => {
-      const todos = await getTodos();
-      setItems(todos);
+      const books = await getBooks();
+      setItems(books);
     };
     fetchItems();
-    console.log(datass);
   };
   return (
     <div className="container">
@@ -37,19 +35,19 @@ export const TodoList = () => {
             </tr>
           </thead>
           <tbody>
-            {items.map((todo) => (
-              <tr key={todo._id}>
-                <td>{todo.text}</td>
-                <td>{todo.author}</td>
-                <td>{todo.genre}</td>
+            {items.map((book) => (
+              <tr key={book._id}>
+                <td>{book.text}</td>
+                <td>{book.author}</td>
+                <td>{book.genre}</td>
                 <td style={{ display: "flex" }}>
                   <button type="button" class="btn btn-warning">
-                    <Link to={`/edit/${todo._id}`}>Edit</Link>
+                    <Link to={`/edit/${book._id}`}>Edit</Link>
                   </button>
                   &nbsp;&nbsp;
                   <button
                     className="btn btn-danger"
-                    onClick={() => ass(todo._id)}
+                    onClick={() => ass(book._id)}
                   >
                     Delete
                   </button>
